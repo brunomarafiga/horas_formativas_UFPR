@@ -482,3 +482,68 @@ dialog::backdrop {
     #btn-config { position: relative; margin-top: 0.5rem; }
 }
 
+/* Footer */
+.site-footer {
+    border-top: 1px solid var(--glass-border);
+    padding-top: 2rem;
+    margin-top: 1rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.footer-column h4 {
+    color: var(--primary-light);
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.footer-column p {
+    color: var(--gray);
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-column a {
+    color: var(--primary-light);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-column a:hover {
+    color: var(--secondary);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--light);
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.social-links a:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+}
