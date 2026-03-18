@@ -19,7 +19,16 @@ btnConfig = document.getElementById('btn-config')
 modalConfig = document.getElementById('config-modal')
 btnSaveConfig = document.getElementById('btn-save-config')
 inputApiKey = document.getElementById('input-apikey')
-inputData = document.getElementById('input-data')
+inputMes = document.getElementById('input-mes')
+inputAno = document.getElementById('input-ano')
+
+# Preencher anos dinamicamente (2015 até o ano atual + 1)
+from datetime import date
+for y in range(2015, date.today().year + 2):
+    opt = document.createElement('option')
+    opt.value = str(y)
+    opt.textContent = str(y)
+    inputAno.appendChild(opt)
 
 dropzone = document.getElementById('dropzone')
 fileInput = document.getElementById('file-input')
@@ -183,7 +192,11 @@ def load_config():
             config['apiKey'] = cfg.get('apiKey', '')
             config['dataIngresso'] = cfg.get('dataIngresso', '')
             inputApiKey.value = config['apiKey']
-            inputData.value = config['dataIngresso']
+            # Restaurar selects de mês/ano
+            if config['dataIngresso'] and '-' in config['dataIngresso']:
+                parts = config['dataIngresso'].split('-')
+                inputAno.value = parts[0]
+                inputMes.value = parts[1]
         except Exception as e:
             js.console.error("Erro lendo config localStorage", str(e))
 
@@ -223,12 +236,14 @@ btnConfig.onclick = on_config_open
 
 def on_config_save(e):
     k = inputApiKey.value.strip()
-    d = inputData.value.strip()
+    mes = inputMes.value
+    ano = inputAno.value
     
-    if not k or not d:
+    if not k or not mes or not ano:
         js.alert("Por favor, preencha todos os campos!")
         return
-        
+    
+    d = f"{ano}-{mes}"
     config['apiKey'] = k
     config['dataIngresso'] = d
     

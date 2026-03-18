@@ -43,8 +43,27 @@
             </div>
 
             <div class="form-group">
-                <label for="input-data"><i class="fa-solid fa-calendar-alt"></i> Mês/Ano de Ingresso na UFPR</label>
-                <input type="month" id="input-data" placeholder="2023-08">
+                <label><i class="fa-solid fa-calendar-alt"></i> Mês/Ano de Ingresso na UFPR</label>
+                <div class="date-row">
+                    <select id="input-mes">
+                        <option value="">Mês</option>
+                        <option value="01">Janeiro</option>
+                        <option value="02">Fevereiro</option>
+                        <option value="03">Março</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Maio</option>
+                        <option value="06">Junho</option>
+                        <option value="07">Julho</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    <select id="input-ano">
+                        <option value="">Ano</option>
+                    </select>
+                </div>
                 <small>Certificados anteriores a esse mês serão considerados inválidos.</small>
             </div>
 
