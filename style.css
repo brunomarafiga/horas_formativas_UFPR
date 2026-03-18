@@ -329,6 +329,7 @@ dialog::backdrop {
 /* Files Table */
 .file-list-container {
     margin-top: 2rem;
+    overflow-x: auto;
 }
 
 .actions-row {
@@ -336,6 +337,7 @@ dialog::backdrop {
     justify-content: flex-end;
     gap: 1rem;
     margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .glass-table {
@@ -344,18 +346,57 @@ dialog::backdrop {
     background: rgba(255, 255, 255, 0.02);
     border-radius: 12px;
     overflow: hidden;
+    table-layout: fixed;
 }
 
 .glass-table th, .glass-table td {
-    padding: 1rem;
+    padding: 0.75rem 0.5rem;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Larguras das colunas */
+.glass-table th:nth-child(1),
+.glass-table td:nth-child(1) { width: 10%; }  /* Status */
+.glass-table th:nth-child(2),
+.glass-table td:nth-child(2) { width: 10%; }  /* Data */
+.glass-table th:nth-child(3),
+.glass-table td:nth-child(3) { width: 28%; }  /* Assunto */
+.glass-table th:nth-child(4),
+.glass-table td:nth-child(4) { width: 22%; }  /* Categoria */
+.glass-table th:nth-child(5),
+.glass-table td:nth-child(5) { width: 8%; }   /* Horas Cert */
+.glass-table th:nth-child(6),
+.glass-table td:nth-child(6) { width: 8%; }   /* Horas UFPR */
+.glass-table th:nth-child(7),
+.glass-table td:nth-child(7) { width: 10%; }  /* Ações */
+
+.glass-table td strong {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.glass-table td small {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
 }
 
 .glass-table th {
     background: rgba(255, 255, 255, 0.05);
     color: var(--primary-light);
     font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .glass-table tbody tr:hover {
@@ -363,10 +404,12 @@ dialog::backdrop {
 }
 
 .badge {
-    padding: 0.3rem 0.6rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 600;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 .badge.success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.5); }
@@ -416,13 +459,26 @@ dialog::backdrop {
     font-size: 0.8rem;
     text-decoration: none;
     transition: all 0.2s;
+    white-space: nowrap;
 }
 
 .btn-small:hover {
     background: var(--primary-light);
 }
 
+/* Card info responsive fix */
+.card-info h2 {
+    font-size: 1.8rem;
+    flex-wrap: wrap;
+}
+
 @media (max-width: 768px) {
+    .container { padding: 1rem; margin: 0.5rem; }
     .summary-cards { grid-template-columns: 1fr; }
     .glass-table { display: block; overflow-x: auto; }
+    .glass-table th, .glass-table td { padding: 0.5rem 0.3rem; font-size: 0.8rem; }
+    .card-info h2 { font-size: 1.4rem; }
+    .logo-container { font-size: 1.8rem; }
+    #btn-config { position: relative; margin-top: 0.5rem; }
 }
+
