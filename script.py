@@ -329,8 +329,72 @@ fileInput.onchange = handle_file_select
 
 # --- Lógica Core (Upload e Gemini) ---
 
+# Cache do modelo descoberto para não consultar a API a cada arquivo
+_cached_model = None
+
+async def discover_best_model():
+    """Consulta a API do Google para encontrar o melhor modelo disponível.
+    Prioridade: modelos 'pro' estáveis > flash estáveis > qualquer outro.
+    Faz fallback para 'gemini-2.0-flash' que é o estável garantido."""
+    global _cached_model
+    if _cached_model:
+        return _cached_model
+    
+    try:
+        list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={config['apiKey']}"
+        resp = await js.fetch(list_url)
+        if not resp.ok:
+            _cached_model = "gemini-2.0-flash"
+            return _cached_model
+        
+        data = await resp.json()
+        models_list = data.to_py().get('models', [])
+        
+        # Filtra modelos que suportam generateContent
+        generative = []
+        for m in models_list:
+            name = m.get('name', '')
+            methods = m.get('supportedGenerationMethods', [])
+            if 'generateContent' in methods and 'gemini' in name:
+                # Pega só o nome curto (ex: "models/gemini-2.0-flash" -> "gemini-2.0-flash")
+                short = name.replace('models/', '')
+                generative.append(short)
+        
+        # Prioridade: pro > flash, versão mais recente > antiga
+        def model_score(name):
+            score = 0
+            if 'experimental' in name:
+                score -= 5  # penaliza apenas experimental (muito instável)
+            if 'pro' in name:
+                score += 5
+            if 'flash' in name:
+                score += 3
+            if 'preview' in name:
+                score += 1  # preview é aceitável, leve bônus por ser mais novo
+            # Modelos mais recentes (número maior = melhor)
+            import re
+            nums = re.findall(r'(\d+\.\d+)', name)
+            if nums:
+                score += float(nums[0]) * 2
+            return score
+        
+        generative.sort(key=model_score, reverse=True)
+        
+        if generative:
+            _cached_model = generative[0]
+            js.console.log(f"Modelo Gemini selecionado automaticamente: {_cached_model}")
+        else:
+            _cached_model = "gemini-2.0-flash"
+            
+    except Exception as e:
+        js.console.error("Falha ao descobrir modelos, usando fallback", str(e))
+        _cached_model = "gemini-2.0-flash"
+    
+    return _cached_model
+
 async def analyze_with_gemini(b64_string, filename):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key={config['apiKey']}"
+    model_name = await discover_best_model()
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={config['apiKey']}"
     
     prompt_text = """
         Analise este certificado acadêmico/universitário e extraia rigorosamente as informações no formato JSON abaixo.

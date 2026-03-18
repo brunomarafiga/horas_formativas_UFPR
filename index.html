@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <div class="background-blobs">
         <div class="blob blob-1"></div>
@@ -32,13 +34,14 @@
         <dialog id="config-modal" class="glass-panel">
             <h2>Configuração Inicial</h2>
             <p>Os dados ficam salvos apenas localmente no seu navegador para privacidade.</p>
-            
+
             <div class="form-group">
                 <label for="input-apikey"><i class="fa-solid fa-key"></i> Google Gemini API Key</label>
                 <input type="password" id="input-apikey" placeholder="AIzaSy...">
-                <small><a href="https://aistudio.google.com/app/apikey" target="_blank">Obter minha chave gratuitamente</a></small>
+                <small><a href="https://aistudio.google.com/app/apikey" target="_blank">Obter minha chave
+                        gratuitamente</a></small>
             </div>
-            
+
             <div class="form-group">
                 <label for="input-data"><i class="fa-solid fa-calendar-alt"></i> Mês/Ano de Ingresso na UFPR</label>
                 <input type="month" id="input-data" placeholder="2023-08">
@@ -58,7 +61,7 @@
                 <p>Ou clique para selecionar arquivos PDF (Pode enviar vários juntos!)</p>
                 <input type="file" id="file-input" multiple accept=".pdf" hidden>
             </div>
-            
+
             <div id="processing-status" class="status-panel hidden">
                 <div class="spinner"></div>
                 <p id="status-text">A IA está lendo o certificado <span id="current-file-name"></span>...</p>
@@ -78,13 +81,15 @@
                         <h2 id="total-hours">0h <span class="limit">/ 140h min</span></h2>
                     </div>
                 </div>
-                
+
                 <div class="card glass-card">
                     <div class="card-icon blue"><i class="fa-solid fa-book-open"></i></div>
                     <div class="card-info">
                         <h4>Grupo 1: Acadêmico</h4>
                         <h2 id="grupo1-hours">0h <span class="limit">(Mín: 40h | Máx: 70h)</span></h2>
-                        <div class="mini-progress"><div id="prog-g1" class="mini-fill" style="width:0%"></div></div>
+                        <div class="mini-progress">
+                            <div id="prog-g1" class="mini-fill" style="width:0%"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -93,7 +98,9 @@
                     <div class="card-info">
                         <h4>Grupo 2: Social</h4>
                         <h2 id="grupo2-hours">0h <span class="limit">(Mín: 40h | Máx: 70h)</span></h2>
-                        <div class="mini-progress"><div id="prog-g2" class="mini-fill" style="width:0%"></div></div>
+                        <div class="mini-progress">
+                            <div id="prog-g2" class="mini-fill" style="width:0%"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -102,10 +109,13 @@
             <div class="file-list-container">
                 <h3>Certificados Processados</h3>
                 <div class="actions-row">
-                    <button id="btn-export-csv" class="btn-primary"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
-                    <button id="btn-clear" class="btn-secondary"><i class="fa-solid fa-trash"></i> Limpar Histórico</button>
+                    <button id="btn-export-csv" class="btn-primary"><i class="fa-solid fa-file-csv"></i> Exportar
+                        CSV</button>
+                    <button id="btn-clear" class="btn-secondary"><i class="fa-solid fa-trash"></i> Limpar
+                        Histórico</button>
                     <!-- Experimental: File System API integration -->
-                    <button id="btn-organize" class="btn-primary" style="display: none;"><i class="fa-solid fa-folder-tree"></i> Organizar Pastas Nativamente</button>
+                    <button id="btn-organize" class="btn-primary" style="display: none;"><i
+                            class="fa-solid fa-folder-tree"></i> Organizar Pastas Nativamente</button>
                 </div>
                 <table class="glass-table">
                     <thead>
@@ -121,7 +131,9 @@
                     </thead>
                     <tbody id="cert-table-body">
                         <!-- Placeholder -->
-                        <tr class="empty-row"><td colspan="7">Nenhum certificado processado ainda. Adicione PDFs acima!</td></tr>
+                        <tr class="empty-row">
+                            <td colspan="7">Nenhum certificado processado ainda. Adicione PDFs acima!</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -132,15 +144,20 @@
                 <div class="footer-column">
                     <h4>Contato</h4>
                     <p><i class="fas fa-user"></i> Bruno de Paula Marafiga</p>
-                    <p><i class="fas fa-envelope"></i> <a href="mailto:brunomarafiga@proton.me">brunomarafiga@proton.me</a></p>
+                    <p><i class="fas fa-envelope"></i> <a
+                            href="mailto:brunomarafiga@proton.me">brunomarafiga@proton.me</a></p>
                 </div>
                 <div class="footer-column">
                     <h4>Redes Sociais</h4>
                     <div class="social-links">
-                        <a href="https://www.linkedin.com/in/bruno-marafiga/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/brunomarafiga" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-                        <a href="https://www.instagram.com/brunomarafiga/" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.youtube.com/@informacaopopular" aria-label="YouTube" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.linkedin.com/in/bruno-marafiga/" aria-label="LinkedIn" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/brunomarafiga" aria-label="GitHub" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+                        <a href="https://www.instagram.com/brunomarafiga/" aria-label="Instagram" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@brunomarafiga" aria-label="YouTube" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
             </div>
@@ -151,4 +168,5 @@
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
     <script type="py" src="script.py"></script>
 </body>
+
 </html>
