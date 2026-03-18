@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFPR - Gestor de Certificados e Horas</title>
+    <!-- Modern Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="container glass-panel">
+        <header>
+            <div class="logo-container">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h1><span class="highlight">UFPR</span> Certificados</h1>
+            </div>
+            <p>Gerenciador Inteligente de Atividades Formativas com IA</p>
+            <button id="btn-config" class="btn-icon"><i class="fa-solid fa-cog"></i> Configurações</button>
+        </header>
+
+        <!-- Config Modal -->
+        <dialog id="config-modal" class="glass-panel">
+            <h2>Configuração Inicial</h2>
+            <p>Os dados ficam salvos apenas localmente no seu navegador para privacidade.</p>
+            
+            <div class="form-group">
+                <label for="input-apikey"><i class="fa-solid fa-key"></i> Google Gemini API Key</label>
+                <input type="password" id="input-apikey" placeholder="AIzaSy...">
+                <small><a href="https://aistudio.google.com/app/apikey" target="_blank">Obter minha chave gratuitamente</a></small>
+            </div>
+            
+            <div class="form-group">
+                <label for="input-data"><i class="fa-solid fa-calendar-alt"></i> Mês/Ano de Ingresso na UFPR</label>
+                <input type="month" id="input-data" placeholder="2023-08">
+                <small>Certificados anteriores a esse mês serão considerados inválidos.</small>
+            </div>
+
+            <div class="modal-actions">
+                <button id="btn-save-config" class="btn-primary">Salvar e Fechar</button>
+            </div>
+        </dialog>
+
+        <!-- Upload Dropzone -->
+        <section class="upload-section">
+            <div id="dropzone" class="dropzone">
+                <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                <h3>Arraste seus certificados pra cá</h3>
+                <p>Ou clique para selecionar arquivos PDF (Pode enviar vários juntos!)</p>
+                <input type="file" id="file-input" multiple accept=".pdf" hidden>
+            </div>
+            
+            <div id="processing-status" class="status-panel hidden">
+                <div class="spinner"></div>
+                <p id="status-text">A IA está lendo o certificado <span id="current-file-name"></span>...</p>
+                <div class="progress-bar-container">
+                    <div id="progress-bar-fill" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard / Summary -->
+        <section class="dashboard-section">
+            <div class="summary-cards">
+                <div class="card glass-card">
+                    <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="card-info">
+                        <h4>Total de Horas Válidas</h4>
+                        <h2 id="total-hours">0h <span class="limit">/ 140h min</span></h2>
+                    </div>
+                </div>
+                
+                <div class="card glass-card">
+                    <div class="card-icon blue"><i class="fa-solid fa-book-open"></i></div>
+                    <div class="card-info">
+                        <h4>Grupo 1: Acadêmico</h4>
+                        <h2 id="grupo1-hours">0h <span class="limit">(Mín: 40h | Máx: 70h)</span></h2>
+                        <div class="mini-progress"><div id="prog-g1" class="mini-fill" style="width:0%"></div></div>
+                    </div>
+                </div>
+
+                <div class="card glass-card">
+                    <div class="card-icon green"><i class="fa-solid fa-users"></i></div>
+                    <div class="card-info">
+                        <h4>Grupo 2: Social</h4>
+                        <h2 id="grupo2-hours">0h <span class="limit">(Mín: 40h | Máx: 70h)</span></h2>
+                        <div class="mini-progress"><div id="prog-g2" class="mini-fill" style="width:0%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List of Processed Files -->
+            <div class="file-list-container">
+                <h3>Certificados Processados</h3>
+                <div class="actions-row">
+                    <button id="btn-export-csv" class="btn-primary"><i class="fa-solid fa-file-csv"></i> Exportar CSV</button>
+                    <button id="btn-clear" class="btn-secondary"><i class="fa-solid fa-trash"></i> Limpar Histórico</button>
+                    <!-- Experimental: File System API integration -->
+                    <button id="btn-organize" class="btn-primary" style="display: none;"><i class="fa-solid fa-folder-tree"></i> Organizar Pastas Nativamente</button>
+                </div>
+                <table class="glass-table">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Assunto</th>
+                            <th>Categoria (UFPR)</th>
+                            <th>Horas (Cert.)</th>
+                            <th>Horas (UFPR)</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cert-table-body">
+                        <!-- Placeholder -->
+                        <tr class="empty-row"><td colspan="7">Nenhum certificado processado ainda. Adicione PDFs acima!</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- PyScript Loader -->
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <script type="py" src="script.py"></script>
+</body>
+</html>
